@@ -1,0 +1,2 @@
+src/cJSON.c linguist-vendored
+src/libs/**/* linguist-vendored
