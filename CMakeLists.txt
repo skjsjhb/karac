@@ -13,11 +13,11 @@ add_executable(karac
 if (WIN32)
     include_directories(build/webview2sdk/build/native/include)
     target_link_libraries(karac advapi32 ole32 shell32 shlwapi user32 version)
-    add_compile_options(karac PUBLIC -mwindows)
+    set(CMAKE_CXX_FLAGS "-mwindows -static")
 endif (WIN32)
 
 if (APPLE)
-    add_compile_options(karac PUBLIC -framework WebKit)
+    set(CMAKE_CXX_FLAGS "-framework WebKit")
 endif (APPLE)
 
 if (UNIX)
@@ -26,7 +26,7 @@ if (UNIX)
     pkg_check_modules(WEBKIT2GTK REQUIRED webkit2gtk-4.0)
     target_link_libraries(karac ${GTK_LIBRARIES} ${WEBKIT2GTK_LIIBRARIES})
     target_include_directories(karac PUBLIC ${GTK_INCLUDE_DIRS} ${WEBKIT2GTK_INCLUDE_DIRS})
-    add_compile_options(karac PUBLIC ${GTK_CFLAGS_OTHER} ${WEBKIT2GTK_CFLAGS_OTHER})
+    set(CMAKE_CXX_FLAGS "${GTK_CFLAGS_OTHER} ${WEBKIT2GTK_CFLAGS_OTHER}")
 endif (UNIX)
 
 
