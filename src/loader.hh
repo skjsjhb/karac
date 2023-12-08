@@ -31,6 +31,9 @@ window._KARA_WS_.onmessage = (e) => {
         if (method === "setFrame") {
             window._KARA_SET_FRAME_(args[0]);
         }
+        if (method === "openDevTools") {
+            window._KARA_OPEN_DEVTOOLS_();
+        }
     }
 };
 window._KARA_WS_.onopen = () => {

@@ -91,6 +91,13 @@ int main() {
         return "";
     });
 
+    w.bind("_KARA_OPEN_DEVTOOLS_", [&w](const std::string &req) -> std::string {
+#if defined(_WIN32) || defined(__CYGWIN__) || defined(__MINGW64__)
+        w.m_webview->OpenDevToolsWindow();
+#endif
+        return "";
+    });
+
     std::cout << "Patching init script.\n";
     w.init("window._KARA_ID_ = \"" + id + "\";");
     w.init("window._KARA_WS_PORT_ = \"" + wsPort + "\";");
