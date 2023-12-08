@@ -1,0 +1,27 @@
+name: Cross Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        build_type: [Release]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure CMake
+      run: >
+        ./setup.sh && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
+
+    - name: Build
+      run: cmake --build . --config Release
