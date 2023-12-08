@@ -4,42 +4,8 @@
 #include <sstream>
 #include <iostream>
 #include "cJSON.h"
-
-static std::string KARAC_LOADER = R"(
-window._KARA_WS_ = new WebSocket("ws://localhost:" + window._KARA_WS_PORT_);
-window._KARA_WS_.onmessage = (e) => {
-    const {token, type, body} = JSON.parse(e.data.toString());
-    if (token !== window._KARA_WS_TOKEN_) return;
-    if (type === "system") {
-        const {method, args} = JSON.parse(body);
-        if (method === "navigate") {
-            window._KARA_NAVIGATE_(args[0]);
-        }
-        if (method === "setTitle") {
-            window._KARA_SET_TITLE_(args[0]);
-        }
-        if (method === "stop") {
-            window._KARA_STOP_();
-        }
-        if (method === "setHTML") {
-            window._KARA_SET_HTML_(args[0]);
-        }
-        if (method === "eval") {
-            window._KARA_EVAL_(args[0]);
-        }
-        if (method === "setSize") {
-            window._KARA_SET_SIZE_(args[0], args[1]);
-        }
-    }
-};
-window._KARA_WS_.onopen = () => {
-    window._KARA_WS_.send(JSON.stringify({
-        id: window._KARA_ID_,
-        token: window._KARA_WS_TOKEN_,
-        body: "_WS_REG_"
-    }));
-}
-)";
+#include "loader.hh"
+#include "tweaks.hh"
 
 int main() {
     const char *debugStr = getenv("KARA_DEBUG");
@@ -64,7 +30,7 @@ int main() {
         loaderScript = loaderContent.str();
     } else {
         std::cout << "Using bundled loader.\n";
-        loaderScript = KARAC_LOADER;
+        loaderScript = KARAC_DEFAULT_LOADER;
     }
 
     webview::webview w(isDebug, nullptr);
@@ -113,6 +79,14 @@ int main() {
         double width = cJSON_GetNumberValue(cJSON_GetArrayItem(args, 0));
         double height = cJSON_GetNumberValue(cJSON_GetArrayItem(args, 1));
         w.set_size(static_cast<int>(width), static_cast<int>(height), WEBVIEW_HINT_NONE);
+        cJSON_Delete(args);
+        return "";
+    });
+
+    w.bind("_KARA_SET_FRAME_", [&w](const std::string &req) -> std::string {
+        cJSON *args = cJSON_Parse(req.c_str());
+        bool frame = cJSON_IsTrue(cJSON_GetArrayItem(args, 0));
+        toggleWindowFrame(w.window(), frame);
         cJSON_Delete(args);
         return "";
     });

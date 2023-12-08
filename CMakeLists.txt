@@ -3,11 +3,12 @@ project(karac)
 
 set(CMAKE_CXX_STANDARD 23)
 
-include_directories(libs/webview libs/cJSON)
+include_directories(libs/webview libs/cJSON src)
 
 add_executable(karac
         src/karac.cc
         src/cJSON.c
+        src/tweaks.cc
 )
 
 if (WIN32)
