@@ -10,18 +10,22 @@ jobs:
   build:
     runs-on: ${{ matrix.os }}
 
+    defaults:
+      run:
+        shell: bash
+
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        build_type: [Release]
+        os: [ ubuntu-latest, windows-latest ]
+        build_type: [ Release ]
 
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Configure CMake
-      run: >
-        ./setup.sh && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
+      - name: Configure CMake
+        run: >
+          chmod +x ./setup.sh && ./setup.sh && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
 
-    - name: Build
-      run: cmake --build . --config Release
+      - name: Build
+        run: cmake --build . --config Release
