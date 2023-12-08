@@ -4,6 +4,10 @@
 
 #include <windows.h>
 
+#elif defined(__linux__)
+
+#include <gtk/gtk.h>
+
 #endif
 
 void toggleWindowFrame(void *window, bool frame) {
@@ -28,5 +32,8 @@ void toggleWindowFrame(void *window, bool frame) {
 
     SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
                  SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER);
+
+#elif defined(__linux__)
+    gtk_window_set_decorated((GtkWindow*) window, frame ? TRUE : FALSE);
 #endif
 }

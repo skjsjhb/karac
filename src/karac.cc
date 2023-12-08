@@ -94,6 +94,11 @@ int main() {
     w.bind("_KARA_OPEN_DEVTOOLS_", [&w](const std::string &req) -> std::string {
 #if defined(_WIN32) || defined(__CYGWIN__) || defined(__MINGW64__)
         w.m_webview->OpenDevToolsWindow();
+#elif defined(__linux__)
+        WebKitSettings *settings = webkit_web_view_get_settings(WEBKIT_WEB_VIEW(w.m_webview));
+        g_object_set(G_OBJECT(settings), "enable-developer-extras", TRUE, NULL);
+        WebKitWebInspector *inspector = webkit_web_view_get_inspector(WEBKIT_WEB_VIEW(w.m_webview));
+        webkit_web_inspector_show(WEBKIT_WEB_INSPECTOR(inspector));
 #endif
         return "";
     });

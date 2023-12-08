@@ -686,11 +686,10 @@ public:
   }
 
   void eval(const std::string &js) {
-    webkit_web_view_run_javascript(WEBKIT_WEB_VIEW(m_webview), js.c_str(),
-                                   nullptr, nullptr, nullptr);
+    webkit_web_view_evaluate_javascript(WEBKIT_WEB_VIEW(m_webview), js.c_str(), -1,
+                                        nullptr, nullptr, nullptr, nullptr, nullptr);
   }
 
-private:
   virtual void on_message(const std::string &msg) = 0;
 
   static char *get_string_from_js_result(WebKitJavascriptResult *r) {
