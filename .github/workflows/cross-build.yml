@@ -30,7 +30,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Configure CMake
         run: >
-          chmod +x ./setup.sh && ./setup.sh && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ ..
+          chmod +x ./setup.sh 
+          && ./setup.sh 
+          && mkdir -p build 
+          && cd build 
+          && cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_MAKE_PROGRAM=mingw32-make -G "MinGW Makefiles" ..
       - name: Build
         run: >
           cd build && cmake --build . --config Release
