@@ -47,8 +47,8 @@ void toggleWindowFrame(void *window, bool frame) {
         style = static_cast<NSUInteger>(style & (2 | 4 | 8) /* NSWindowStyleMaskTitled */);
     }
 
-    objc::msg_send<void>(window, sel_registerName("setStyleMask:"), style);
-    objc::msg_send<void>(window, sel_registerName("center"));
+    reinterpret_cast<void (*)(void* ...)>(objc_msgSend)(window, sel_registerName("setStyleMask:"), style);
+    reinterpret_cast<void (*)(void* ...)>(objc_msgSend)(window, sel_registerName("center"));
 
 #elif defined(__linux__)
 
