@@ -18,7 +18,8 @@ jobs:
         run: >
           mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
       - name: Build
-        run: cmake --build . --config Release
+        run: >
+          cd build && cmake --build . --config Release
 
   build-windows:
     runs-on: windows-latest
@@ -31,7 +32,8 @@ jobs:
         run: >
           chmod +x ./setup.sh && ./setup.sh && mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
       - name: Build
-        run: cmake --build . --config Release
+        run: >
+          cd build && cmake --build . --config Release
 
   build-macos:
     runs-on: macos-latest
@@ -41,4 +43,5 @@ jobs:
         run: >
           mkdir -p build && cd build && cmake -DCMAKE_BUILD_TYPE=Release ..
       - name: Build
-        run: cmake --build . --config Release
+        run: >
+          cd build && cmake --build . --config Release
