@@ -19,18 +19,15 @@ int main() {
 
     std::cout << "karac instance " << id << ", ws port " << wsPort << '\n';
 
-    std::string loaderScript;
+    std::string loaderScript = KARAC_DEFAULT_LOADER;
 
     const char *loaderPath = getenv("KARA_LOADER_PATH");
     if (loaderPath != nullptr) {
-        std::cout << "Using loader: " << loaderPath << '\n';
+        std::cout << "Patching loader with: " << loaderPath << '\n';
         std::ifstream loaderFile(loaderPath);
         std::stringstream loaderContent;
         loaderContent << loaderFile.rdbuf();
-        loaderScript = loaderContent.str();
-    } else {
-        std::cout << "Using bundled loader.\n";
-        loaderScript = KARAC_DEFAULT_LOADER;
+        loaderScript += loaderContent.str();
     }
 
     webview::webview w(isDebug, nullptr);
@@ -103,7 +100,7 @@ int main() {
         return "";
     });
 
-    std::cout << "Patching init script.\n";
+    std::cout << "Setting init script.\n";
     w.init("window._KARA_ID_ = \"" + id + "\";");
     w.init("window._KARA_WS_PORT_ = \"" + wsPort + "\";");
     w.init("window._KARA_WS_TOKEN_ = \"" + wsToken + "\";");
