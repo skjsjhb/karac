@@ -1,4 +1,6 @@
 #include "tweaks-macos.hh"
+#import <Cocoa/Cocoa.h>
+
 
 void toggleWindowFrameMacOS(void *window, bool frame) {
     NSWindow *window1 = (NSWindow *) window;
