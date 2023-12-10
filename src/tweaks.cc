@@ -6,8 +6,7 @@
 
 #elif defined(__APPLE__)
 
-#include <objc/NSObjCRuntime.h>
-#include <objc/objc-runtime.h>
+#include "tweaks-macos.hh"
 
 #elif defined(__linux__)
 
@@ -37,6 +36,10 @@ void toggleWindowFrame(void *window, bool frame) {
 
     SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
                  SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER);
+
+#elif defined(__APPLE__)
+
+    toggleWindowFrameMacOS(window, frame);
 
 #elif defined(__linux__)
 

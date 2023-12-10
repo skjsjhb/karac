@@ -5,11 +5,26 @@ set(CMAKE_CXX_STANDARD 23)
 
 include_directories(libs/webview libs/cJSON src)
 
-add_executable(karac
-        src/karac.cc
-        src/cJSON.c
-        src/tweaks.cc
-)
+if (APPLE)
+
+    add_executable(karac
+            src/karac.cc
+            src/cJSON.c
+            src/tweaks.cc
+            src/tweaks-macos.mm
+    )
+
+else (APPLE)
+
+    add_executable(karac
+            src/karac.cc
+            src/cJSON.c
+            src/tweaks.cc
+    )
+
+
+endif (APPLE)
+
 
 if (WIN32)
     include_directories(build/webview2sdk/build/native/include)
