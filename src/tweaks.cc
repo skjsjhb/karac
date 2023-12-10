@@ -38,18 +38,6 @@ void toggleWindowFrame(void *window, bool frame) {
     SetWindowPos(hwnd, nullptr, 0, 0, 0, 0,
                  SWP_FRAMECHANGED | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_NOOWNERZORDER);
 
-#elif defined(__APPLE__)
-
-    auto style = static_cast<NSUInteger>(1 | 2 | 4 /* NSWindowStyleMaskTitled | NSWindowStyleMaskClosable |NSWindowStyleMaskMiniaturizable */);
-    if (frame) {
-        style = static_cast<NSUInteger>(style | 1 /* NSWindowStyleMaskTitled */);
-    } else {
-        style = static_cast<NSUInteger>(style & (2 | 4 | 8) /* NSWindowStyleMaskTitled */);
-    }
-
-    reinterpret_cast<void (*)(void* ...)>(objc_msgSend)(window, sel_registerName("setStyleMask:"), style);
-    reinterpret_cast<void (*)(void* ...)>(objc_msgSend)(window, sel_registerName("center"));
-
 #elif defined(__linux__)
 
     gtk_window_set_decorated((GtkWindow*) window, frame ? TRUE : FALSE);
