@@ -7,6 +7,8 @@
 #include "loader.hh"
 #include "tweaks.hh"
 
+static int width = 960, height = 540;
+
 int main() {
     const char *debugStr = getenv("KARA_DEBUG");
     if (debugStr == nullptr) {
@@ -73,9 +75,18 @@ int main() {
 
     w.bind("_KARA_SET_SIZE_", [&w](const std::string &req) -> std::string {
         cJSON *args = cJSON_Parse(req.c_str());
-        double width = cJSON_GetNumberValue(cJSON_GetArrayItem(args, 0));
-        double height = cJSON_GetNumberValue(cJSON_GetArrayItem(args, 1));
-        w.set_size(static_cast<int>(width), static_cast<int>(height), WEBVIEW_HINT_NONE);
+        double wx = cJSON_GetNumberValue(cJSON_GetArrayItem(args, 0));
+        double wy = cJSON_GetNumberValue(cJSON_GetArrayItem(args, 1));
+        w.set_size(width = static_cast<int>(wx), height = static_cast<int>(wy), WEBVIEW_HINT_NONE);
+        cJSON_Delete(args);
+        return "";
+    });
+
+    w.bind("_KARA_SCALE_SIZE_", [&w](const std::string &req) -> std::string {
+        cJSON *args = cJSON_Parse(req.c_str());
+        double xs = cJSON_GetNumberValue(cJSON_GetArrayItem(args, 0));
+        double ys = cJSON_GetNumberValue(cJSON_GetArrayItem(args, 1));
+        w.set_size(width = static_cast<int>(width * xs), height = static_cast<int>(height * ys), WEBVIEW_HINT_NONE);
         cJSON_Delete(args);
         return "";
     });
@@ -105,6 +116,7 @@ int main() {
     w.init("window._KARA_WS_PORT_ = \"" + wsPort + "\";");
     w.init("window._KARA_WS_TOKEN_ = \"" + wsToken + "\";");
     w.init(loaderScript);
+    w.set_size(width, height, WEBVIEW_HINT_NONE);
     w.set_title("karac");
     w.set_html("<p>karac " + id + "</p>");
 
